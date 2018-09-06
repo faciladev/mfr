@@ -26,7 +26,8 @@ class Filter extends Component {
     super(props);
     this.state = {
       //or "filter"
-      display: "units"
+      display: "units",
+      tree_menu_search: ""
     };
   }
 
@@ -80,9 +81,14 @@ class Filter extends Component {
 
     children.every(child => {
       if (child.sub) {
-        return this.hierarchySelectBox(child, options, true, child.name);
+        return this.hierarchySelectBox(
+          child,
+          options,
+          true,
+          `Under ${child.name}`
+        );
       }
-      return null;
+      return child;
     });
     const select = (
       <Aux key={field.id}>
@@ -150,6 +156,12 @@ class Filter extends Component {
     this.props.onReloadFacilities();
   };
 
+  onTreeMenuSearchChange = tree_menu_search => {
+    this.setState({
+      tree_menu_search
+    });
+  };
+
   render() {
     let filter_fields = [];
     //filter field info available
@@ -193,6 +205,8 @@ class Filter extends Component {
           </label>
           <div id="admin_units" className="tab-content tab__admin-units">
             <TreeMenu
+              tree_menu_search={this.state.tree_menu_search}
+              onTreeMenuSearchChange={this.onTreeMenuSearchChange}
               filter={this.props.filter}
               dataSource={this.props.admin_hierarchies}
               onSelectionChange={this.changeSelection}

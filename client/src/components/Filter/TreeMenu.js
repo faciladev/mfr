@@ -27,6 +27,10 @@ class TreeMenu extends Component {
           this.setState({ collapsed });
         }}
         onSelectionChange={this.props.onSelectionChange}
+        // searchText={this.props.tree_menu_search}
+        // onSearchValueChange={new_search_text =>
+        //   this.props.onTreeMenuSearchChange(new_search_text)
+        // }
       />
     );
   }

@@ -44,11 +44,11 @@ const navigation = props => (
           Contact
         </NavLink>
       </li>
-      <li className="nav__items">
+      {/* <li className="nav__items">
         <NavLink to="/login" className="nav__link">
           Login
         </NavLink>
-      </li>
+      </li> */}
     </ul>
   </nav>
 );
