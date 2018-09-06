@@ -1,0 +1,31 @@
+.nav__container {
+  display: flex;
+  list-style: none;
+}
+
+.nav__items {
+  padding: 1rem;
+  align-self: stretch;
+}
+.nav__link {
+  transition: all 0.5s;
+  display: inline-block;
+  &:link,
+  &:visited {
+    text-decoration: none;
+    color: $font-color-light;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #fff;
+    text-transform: uppercase;
+    // text-transform: uppercase;
+  }
+  &:hover,
+  &:active,
+  &.active:link,
+  &.active:visited {
+    color: $color-secondary-blue;
+    transform: scale(1.2);
+    // text-shadow: 0 0.2rem 0.3rem $font-color-light;
+  }
+}

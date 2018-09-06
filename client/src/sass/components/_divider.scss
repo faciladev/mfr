@@ -1,0 +1,34 @@
+.divider {
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  height: 1px;
+}
+.divider-transparent:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  width: 90%;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    $color-secondary-blue,
+    transparent
+  );
+}
+.divider-dot:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -9px;
+  left: calc(50% - 9px);
+  width: 18px;
+  height: 18px;
+  background-color: $color-secondary-blue;
+  border: 1px solid $color-secondary-blue;
+  border-radius: 50%;
+  // box-shadow: inset 0 0 0 2px white, 0 0 0 4px white;
+}

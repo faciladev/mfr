@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  height: 7rem;
+  justify-content: space-between;
+  align-items: center;
+  color: $font-color-dark;
+  padding: 0 2rem;
+  // border-bottom: 1px solid $color-secondary-blue-dark;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  background: linear-gradient(
+    to right,
+    $color-primary-blue,
+    $color-secondary-blue
+  );
+  background: $color-primary-blue;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 200;
+  &__logo {
+    display: flex;
+    align-items: center;
+  }
+}
