@@ -27,8 +27,8 @@ const loadDigestFacilityType = data => {
         "Health Center",
         "Health Post",
         "Lab",
-        "Office",
-        "Dentist"
+        "Office"
+        // "Dentist"
       ],
       datasets: [
         {
@@ -52,30 +52,28 @@ export const digestFacilityType = () => {
   return dispatch => {
     Promise.all([
       axios.get(
-        prepareLink("collections/20/count.json?facility_type[under]=Hospital")
+        prepareLink("collections/3/count.json?facility_type[under]=Hospital")
       ),
       axios.get(
-        prepareLink("collections/20/count.json?facility_type[under]=Clinic")
-      ),
-      axios.get(
-        prepareLink(
-          "collections/20/count.json?facility_type[under]=Health_Center"
-        )
+        prepareLink("collections/3/count.json?facility_type[under]=Clinic")
       ),
       axios.get(
         prepareLink(
-          "collections/20/count.json?facility_type[under]=Health_Post"
+          "collections/3/count.json?facility_type[under]=Health_Center"
         )
       ),
       axios.get(
-        prepareLink("collections/20/count.json?facility_type[under]=Lab")
+        prepareLink("collections/3/count.json?facility_type[under]=Health_Post")
       ),
       axios.get(
-        prepareLink("collections/20/count.json?facility_type[under]=Office")
+        prepareLink("collections/3/count.json?facility_type[under]=Lab")
+      ),
+      axios.get(
+        prepareLink("collections/3/count.json?facility_type[under]=Office")
       )
       // ,
       // axios.get(
-      //   prepareLink("collections/20/count.json?facility_type[under]=Dentist")
+      //   prepareLink("collections/3/count.json?facility_type[under]=Dentist")
       // )
     ])
       .then(res => {
@@ -112,17 +110,17 @@ export const digestOperationalStatus = () => {
     Promise.all([
       axios.get(
         prepareLink(
-          "collections/20/count.json?operational_status=fully_functional"
+          "collections/3/count.json?operational_status=fully_functional"
         )
       ),
       axios.get(
         prepareLink(
-          "collections/20/count.json?operational_status=partially_functional"
+          "collections/3/count.json?operational_status=partially_functional"
         )
       ),
       axios.get(
         prepareLink(
-          "collections/20/count.json?operational_status=not_functional"
+          "collections/3/count.json?operational_status=not_functional"
         )
       )
     ])
@@ -158,9 +156,9 @@ const loadDigestOwnershipStatus = data => {
 export const digestOwnershipStatus = () => {
   return dispatch => {
     Promise.all([
-      axios.get(prepareLink("collections/20/count.json?ownership[under]=gov")),
-      axios.get(prepareLink("collections/20/count.json?ownership[under]=priv")),
-      axios.get(prepareLink("collections/20/count.json?ownership[under]=ngo"))
+      axios.get(prepareLink("collections/3/count.json?ownership[under]=gov")),
+      axios.get(prepareLink("collections/3/count.json?ownership[under]=priv")),
+      axios.get(prepareLink("collections/3/count.json?ownership[under]=ngo"))
     ])
       .then(res => {
         const data = res.map(digest => digest.data);
