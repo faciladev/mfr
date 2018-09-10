@@ -5,6 +5,8 @@ import { withRouter } from "react-router-dom";
 import * as actions from "../../store/actions/index";
 import sprites from "../../assets/img/sprites.svg";
 import Spinner from "../Spinner/Spinner";
+import axios from "../../axios-resmap";
+import { prepareLink } from "../../shared/utility";
 
 const DISPLAYED_FIELDS = {
   ethiopian_national_identifier: "National Id",
@@ -19,6 +21,33 @@ const DISPLAYED_FIELDS = {
 class Table extends Component {
   selectFacilityHandler = site_id => {
     this.props.history.push(`/facilities/${site_id}`);
+  };
+
+  download = () => {
+    const filter = this.props.filter;
+
+    let query_str = "";
+    //If there are filters applied use them
+    if (Object.keys(filter).length > 0) {
+      let query = [];
+      for (const field in filter) {
+        query.push(filter[field]);
+      }
+      query_str = `?${query.join("&")}`;
+    }
+
+    axios({
+      url: prepareLink(`collections/3.csv${query_str}`),
+      method: "GET",
+      responseType: "blob" // important
+    }).then(response => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.csv"); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    });
   };
 
   render() {
@@ -67,18 +96,21 @@ class Table extends Component {
             <div className="data-table__title">
               <h2>Facility Listing</h2>
               <span className="data-table__header-icons">
-                <svg
+                {/* <svg
                   className="header-icon header-icon__map"
                   onClick={this.props.onToggleView}
                 >
                   <use xlinkHref={sprites + "#icon-pin_drop"} />
-                </svg>
-                <svg className="header-icon header-icon__download">
+                </svg> */}
+                <svg
+                  onClick={this.download}
+                  className="header-icon header-icon__download"
+                >
                   <use xlinkHref={sprites + "#icon-download"} />
                 </svg>
-                <svg className="header-icon header-icon__print">
+                {/* <svg className="header-icon header-icon__print">
                   <use xlinkHref={sprites + "#icon-print"} />
-                </svg>
+                </svg> */}
               </span>
             </div>
             <table className="data-table__table">
@@ -165,5 +197,9 @@ const sortDataTable = (field, [...data], direction = true /*ascending*/) => {
   // });
   // this.setState({ data });
 };
-
-export default withRouter(Table);
+const mapStateToProps = state => {
+  return {
+    filter: state.facilityListingReducer.filter
+  };
+};
+export default withRouter(connect(mapStateToProps)(Table));
