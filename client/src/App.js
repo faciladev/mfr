@@ -9,6 +9,7 @@ import Geolocator from "./containers/Geolocator/Geolocator";
 import Api from "./containers/Api/Api";
 import Faq from "./containers/Faq/Faq";
 import Contact from "./containers/Contact/Contact";
+import SingleFacility from "./components/SingleFacility/SingleFacility";
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
         <Route path="/apidocs" component={Api} />
         <Route path="/faq" component={Faq} />
         <Route path="/contact" component={Contact} />
+        <Route path="/facilities/:id" component={SingleFacility} />
         <Route path="/" exact component={Home} />
       </Switch>
     );

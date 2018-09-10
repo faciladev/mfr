@@ -16,7 +16,6 @@ class SearchFacility extends Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
     this.props.onResetFilter();
     if (!this.props.admin_hierarchies) {
       this.props.onFetchAdminHierarchies();

@@ -8,7 +8,15 @@ const initialState = {
   page: 1,
   filter: {},
   filter_fields_info: null,
-  filter_fields_values: {}
+  filter_fields_values: {},
+  selected_facility: null,
+  selected_facility_viewport: {
+    height: 200,
+    zoom: 5,
+    longitude: null,
+    latitude: null
+  },
+  layers_metadata: null
 };
 
 const facilityLoading = (state, action) => {
@@ -78,6 +86,30 @@ const removeFilter = (state, action) => {
   });
 };
 
+const fetchSingleFacility = (state, action) => {
+  return updateObject(state, {
+    selected_facility: action.payload.site
+  });
+};
+
+const deselectSingleFacility = (state, action) => {
+  return updateObject(state, {
+    selected_facility: null
+  });
+};
+
+const updateSingleFacilityViewport = (state, action) => {
+  return updateObject(state, {
+    selected_facility_viewport: action.payload.selected_facility_viewport
+  });
+};
+
+const fetchLayersMetadata = (state, action) => {
+  return updateObject(state, {
+    layers_metadata: action.payload.layers_metadata
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_ALL_FACILITY_COUNT_SUCCESS:
@@ -100,6 +132,14 @@ const reducer = (state = initialState, action) => {
       return setFilterFieldValue(state, action);
     case actionTypes.REMOVE_FILTER:
       return removeFilter(state, action);
+    case actionTypes.FETCH_SINGLE_FACILITY:
+      return fetchSingleFacility(state, action);
+    case actionTypes.DESELECT_SINGLE_FACILITY:
+      return deselectSingleFacility(state, action);
+    case actionTypes.UPDATE_SINGLE_FACILITY_VIEWPORT:
+      return updateSingleFacilityViewport(state, action);
+    case actionTypes.FETCH_LAYERS_METADATA:
+      return fetchLayersMetadata(state, action);
     default:
       return state;
   }

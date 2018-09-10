@@ -72,10 +72,11 @@ export const digestFacilityType = () => {
       ),
       axios.get(
         prepareLink("collections/20/count.json?facility_type[under]=Office")
-      ),
-      axios.get(
-        prepareLink("collections/20/count.json?facility_type[under]=Dentist")
       )
+      // ,
+      // axios.get(
+      //   prepareLink("collections/20/count.json?facility_type[under]=Dentist")
+      // )
     ])
       .then(res => {
         const data = res.map(digest => digest.data);

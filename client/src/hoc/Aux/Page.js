@@ -1,16 +1,27 @@
-import React from "react";
+import React, { Component } from "react";
 import Aux from "../../hoc/Aux/Aux";
 import Divider from "../../components/UI/Divider";
 
-const page = props => (
-  <Aux>
-    <div className="page">
-      <h1 className="page__title">{props.title}</h1>
-      <p className="page__description">{props.description}</p>
-    </div>
-    <Divider />
-    {props.children}
-  </Aux>
-);
+class Page extends Component {
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
 
-export default page;
+  render() {
+    return (
+      <Aux>
+        <div className="page">
+          <div className="page__header">
+            <h1 className="page__title">{this.props.title}</h1>
+            <p className="page__description">{this.props.description}</p>
+            {this.props.header}
+          </div>
+          <Divider />
+          <div className="page__body">{this.props.children}</div>
+        </div>
+      </Aux>
+    );
+  }
+}
+
+export default Page;

@@ -205,3 +205,73 @@ export const setFilterFieldValue = (field_id, value) => {
     });
   };
 };
+
+const fetchSingleFacilitySuccess = site => {
+  return {
+    type: actionTypes.FETCH_SINGLE_FACILITY,
+    payload: {
+      site
+    }
+  };
+};
+
+export const fetchSingleFacility = site_id => {
+  return dispatch => {
+    axios
+      .get(prepareLink(`collections/3.json?site_id=${site_id}`))
+      .then(res => {
+        dispatch(fetchSingleFacilitySuccess(res.data));
+        dispatch(updateSingleFacilityViewport());
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  };
+};
+
+export const updateSingleFacilityViewport = () => {
+  return (dispatch, getState) => {
+    return dispatch({
+      type: actionTypes.UPDATE_SINGLE_FACILITY_VIEWPORT,
+      payload: {
+        selected_facility_viewport: {
+          ...getState().facilityListingReducer.selected_facility_viewport,
+          longitude: getState().facilityListingReducer.selected_facility
+            ? getState().facilityListingReducer.selected_facility.sites[0].long
+            : null,
+          latitude: getState().facilityListingReducer.selected_facility
+            ? getState().facilityListingReducer.selected_facility.sites[0].lat
+            : null
+        }
+      }
+    });
+  };
+};
+export const deselectSingleFacility = () => {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.DESELECT_SINGLE_FACILITY
+    });
+  };
+};
+
+const fetchLayersMetadataSuccess = layers_metadata => {
+  return {
+    type: actionTypes.FETCH_LAYERS_METADATA,
+    payload: {
+      layers_metadata
+    }
+  };
+};
+export const fetchLayersMetadata = () => {
+  return dispatch => {
+    axios_restricted
+      .get(prepareLink("collections/3/layers.json"))
+      .then(res => {
+        dispatch(fetchLayersMetadataSuccess(res.data));
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  };
+};
