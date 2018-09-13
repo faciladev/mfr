@@ -16,5 +16,6 @@ export { fetchAdminHierarchies } from "./adminHierarchies";
 export {
   digestFacilityType,
   digestOperationalStatus,
-  digestOwnershipStatus
+  digestOwnershipStatus,
+  loadAllCharts
 } from "./charts";

@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "../../axios-resmap";
+import axios_restricted from "../../axios-resmap-restricted";
 import { prepareLink } from "../../shared/utility";
 
 const chartData = {
@@ -166,5 +167,141 @@ export const digestOwnershipStatus = () => {
       })
 
       .catch(err => console.log(err));
+  };
+};
+
+const allChartsLoaded = charts => {
+  return {
+    type: actionTypes.LOAD_ALL_CHARTS,
+    payload: {
+      charts
+    }
+  };
+};
+export const loadAllCharts = setting => {
+  return dispatch => {
+    if (!setting.length > 0) return;
+    // let layers_metadata = null;
+
+    axios_restricted
+      .get(prepareLink("collections/3/layers.json"))
+      .then(res => {
+        const chart_urls = [],
+          chart_labels = [];
+        const layers_metadata = res.data;
+        // console.log(setting);
+        //Loop setting and fields to the object:
+        //field_type, code, name, id
+        for (const chart_setting of setting) {
+          //Get layer of field from the setting
+          const layer_metadata = layers_metadata.find(layer => {
+            return layer.id === chart_setting.layer_id && layer.fields;
+          });
+          //Get detailed field info
+          const field_metadata = layer_metadata.fields.find(
+            field => field.id === chart_setting.field_id
+          );
+
+          chart_setting.label = field_metadata.name;
+
+          let field_url = [],
+            chart_label = [];
+
+          switch (field_metadata.kind) {
+            case "select_many":
+            case "select_one":
+              field_url = field_metadata.config.options.map(option => {
+                chart_label.push(option.label);
+                return `${field_metadata.code}=${option.code}`;
+              });
+              break;
+            case "hierarchy":
+              const tree = [...field_metadata.config.hierarchy];
+              while (tree.length) {
+                const node = tree.shift();
+
+                chart_label.push(node.name);
+                field_url.push(`${field_metadata.code}[under]=${node.id}`);
+
+                if (node.sub) {
+                  tree.unshift(...node.sub);
+                }
+              }
+              break;
+            case "yes_no":
+              chart_label.push(["Available", "Not available"]);
+
+              field_url.push([
+                `${field_metadata.code}=yes`,
+                `${field_metadata.code}=no`
+              ]);
+              break;
+            default:
+              break;
+          }
+
+          //Push field chart urls and labels to
+          //all field urls and labels arrays
+          chart_urls.push(field_url);
+          chart_labels.push(chart_label);
+        }
+
+        return { chart_urls, chart_labels };
+      })
+      .then(({ chart_urls, chart_labels }) => {
+        // Fire up the request
+        Promise.all(
+          chart_urls.map(urls =>
+            Promise.all(
+              urls.map(url =>
+                axios.get(prepareLink(`collections/3/count.json?${url}`))
+              )
+            )
+          )
+        )
+          .then(res => {
+            const chart_configs = res.map((chart, chart_index) => {
+              const chart_config = {};
+              const chart_data = chart.map(response => response.data);
+              chart_config.labels = chart_labels[chart_index];
+              chart_config.datasets = [
+                {
+                  label: setting[chart_index].label,
+                  data: chart_data,
+                  backgroundColor: [
+                    "rgba(255,105,145,0.6)",
+                    "rgba(155,100,210,0.6)",
+                    "rgba(90,178,255,0.6)",
+                    "rgba(240,134,67,0.6)",
+                    "rgba(120,120,120,0.6)",
+                    "rgba(250,55,197,0.6)"
+                  ]
+                }
+              ];
+
+              return {
+                data: chart_config,
+                height: 300,
+                type: setting[chart_index].chart_type,
+                options: {
+                  title: {
+                    display: setting[chart_index].label,
+                    text: setting[chart_index].label,
+                    fontSize: 25
+                  },
+                  legend: {
+                    display: true,
+                    position: "bottom"
+                  }
+                }
+              };
+            });
+            dispatch(allChartsLoaded(chart_configs));
+          })
+          .catch(err => console.error(err));
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
 };

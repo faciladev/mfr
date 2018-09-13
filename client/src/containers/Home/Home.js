@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
+
 import CountUp from "react-countup";
 import Charts from "../../components/Data/Charts";
 import Aux from "../../hoc/Aux/Aux";
@@ -182,9 +184,12 @@ class Home extends Component {
               )}
             </div>
           </div>
-          <a href="#" className="digest__more">
+          <NavLink to="/digest" className="digest__more">
             Go to Digest to see all &rarr;
-          </a>
+          </NavLink>
+          {/* <a href="#" className="digest__more">
+            Go to Digest to see all &rarr;
+          </a> */}
         </div>
         {facility_view}
         {/* <Data display="table" /> */}

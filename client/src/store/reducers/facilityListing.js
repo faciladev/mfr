@@ -140,6 +140,7 @@ const reducer = (state = initialState, action) => {
       return updateSingleFacilityViewport(state, action);
     case actionTypes.FETCH_LAYERS_METADATA:
       return fetchLayersMetadata(state, action);
+
     default:
       return state;
   }

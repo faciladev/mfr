@@ -4,7 +4,8 @@ import { updateObject } from "../../shared/utility";
 const initialState = {
   facility_type_digest: {},
   operational_status_digest: {},
-  ownership_status_digest: {}
+  ownership_status_digest: {},
+  charts: null
 };
 
 const loadDigestByFacilityType = (state, action) => {
@@ -25,6 +26,12 @@ const loadDigestByOwnershipStatus = (state, action) => {
   });
 };
 
+const loadAllChartsSuccess = (state, action) => {
+  return updateObject(state, {
+    charts: action.payload.charts
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.DIGEST_BY_FACILITY_TYPE_LOADED:
@@ -33,6 +40,8 @@ const reducer = (state = initialState, action) => {
       return loadDigestByOperationalStatus(state, action);
     case actionTypes.DIGEST_BY_OWNERSHIP_STATUS_LOADED:
       return loadDigestByOwnershipStatus(state, action);
+    case actionTypes.LOAD_ALL_CHARTS:
+      return loadAllChartsSuccess(state, action);
     default:
       return state;
   }
